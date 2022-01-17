@@ -2,9 +2,11 @@ package pl.petlovers.Pet2Vet.file;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import pl.petlovers.Pet2Vet.visit.Visit;
 import pl.petlovers.Pet2Vet.visit.VisitRepository;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -27,8 +29,9 @@ public class VisitFileService {
     return fileRepository.getById(fileId);
   }
 
-  public File create(long visitId, File file) {
+  public File create(long visitId, MultipartFile multipartFile) throws IOException {
     Visit visit = visitRepository.getById(visitId);
+    File file = File.of(multipartFile);
     visit.addFile(file);
     return fileRepository.save(file);
   }

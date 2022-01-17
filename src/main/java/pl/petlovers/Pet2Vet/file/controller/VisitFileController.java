@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 import pl.petlovers.Pet2Vet.file.VisitFileService;
 import pl.petlovers.Pet2Vet.visit.VisitService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -41,8 +43,8 @@ public class VisitFileController {
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/visits/{visitId}/files")
-  public FileDTO create(@PathVariable long visitId, @RequestBody FileDTO fileDTO) {
-    return FileDTO.of(visitFileService.create(visitId, fileDTO.toFile()));
+  public FileDTO upload (@PathVariable long visitId, @RequestParam("file") MultipartFile multipartFile) throws IOException {
+    return FileDTO.of(visitFileService.create(visitId, multipartFile));
   }
 
   @ResponseStatus(HttpStatus.CREATED)

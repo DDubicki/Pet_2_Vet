@@ -2,10 +2,16 @@ package pl.petlovers.Pet2Vet.file.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.multipart.MultipartFile;
+import pl.petlovers.Pet2Vet.exceptions.not_found_exceptions.FileNotFoundException;
+import pl.petlovers.Pet2Vet.file.File;
 import pl.petlovers.Pet2Vet.file.NoteFileService;
 import pl.petlovers.Pet2Vet.note.NoteService;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,13 +41,13 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       return FileDTO.of(noteFileService.get(fileId));
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new FileNotFoundException(fileId);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
   @PostMapping("/notes/{noteId}/files")
-  public FileDTO create(@PathVariable long noteId, @RequestBody FileDTO fileDTO) {
-    return FileDTO.of(noteFileService.create(noteId, fileDTO.toFile()));
+  public FileDTO upload(@PathVariable long noteId, @RequestParam("file") MultipartFile multipartFile) throws IOException {
+    return FileDTO.of(noteFileService.create(noteId, multipartFile));
   }
 
   @ResponseStatus(HttpStatus.CREATED)
@@ -50,7 +56,7 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       return FileDTO.of(noteFileService.update(noteId, fileId, fileDTO.toFile()));
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new FileNotFoundException(fileId);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -59,7 +65,7 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       noteFileService.delete(fileId);
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new FileNotFoundException(fileId);
   }
 }
 
