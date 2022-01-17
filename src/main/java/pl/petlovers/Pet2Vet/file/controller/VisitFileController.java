@@ -16,6 +16,7 @@ public class VisitFileController {
 
   private final VisitFileService visitFileService;
   private final VisitService visitService;
+  private static final String NO_HACKING_ALLOWED_COMMUNICATE = "You naughty naughty user, no hacking here!";
 
   @Autowired
   public VisitFileController(VisitFileService visitFileService, VisitService visitService) {
@@ -38,7 +39,7 @@ public class VisitFileController {
     if(visitService.get(visitId).containsFile(fileId)) {
       return FileDTO.of(visitFileService.get(fileId));
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
@@ -53,7 +54,7 @@ public class VisitFileController {
     if(visitService.get(visitId).containsFile(fileId)) {
       return FileDTO.of(visitFileService.update(visitId, fileId, fileDTO.toFile()));
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -62,7 +63,7 @@ public class VisitFileController {
     if(visitService.get(visitId).containsFile(fileId)) {
       visitFileService.delete(fileId);
     }
-    throw new IllegalArgumentException("You naughty naughty user, no hacking here!");
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 
 

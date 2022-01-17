@@ -20,6 +20,8 @@ public class NoteFileController {
   private final NoteFileService noteFileService;
   private final NoteService noteService;
 
+  private static final String NO_HACKING_ALLOWED_COMMUNICATE = "You naughty naughty user, no hacking here!";
+
   @Autowired
   public NoteFileController(NoteFileService noteFileService, NoteService noteService) {
     this.noteFileService = noteFileService;
@@ -41,7 +43,7 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       return FileDTO.of(noteFileService.get(fileId));
     }
-    throw new FileNotFoundException(fileId);
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 
   @ResponseStatus(HttpStatus.CREATED)
@@ -56,7 +58,7 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       return FileDTO.of(noteFileService.update(noteId, fileId, fileDTO.toFile()));
     }
-    throw new FileNotFoundException(fileId);
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 
   @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -65,7 +67,7 @@ public class NoteFileController {
     if (noteService.getNote(noteId).containsFile(fileId)) {
       noteFileService.delete(fileId);
     }
-    throw new FileNotFoundException(fileId);
+    throw new IllegalArgumentException(NO_HACKING_ALLOWED_COMMUNICATE);
   }
 }
 
